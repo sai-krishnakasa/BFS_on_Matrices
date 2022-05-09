@@ -1,0 +1,171 @@
+Shortest Source to Destination Path 
+
+    Reference:
+    
+#include<bits/stdc++.h>
+using namespace std;
+
+bool isvalid(int ni,int nj,int n,int m)
+{
+    if(ni>=0 and nj>=0 and ni<n and nj<m)
+    {
+        return true;
+    }
+    return false;
+}
+
+int shortest_path(int mat[][4],int vis[][4],int x,int y)
+{
+    if(x==0 and y==0)
+    {
+        return 0;
+    }
+    if(mat[0][0]==0)
+    {
+        return -1;
+    }
+    queue<pair<pair<int,int>,int>>q;
+    int di[4]={-1,0,1,0};
+    int dj[4]={0,1,0,-1};
+    vis[0][0]=1;
+    q.push({{0,0},0});
+    while(!q.empty())
+    {
+        auto it=q.front();
+        int i=it.first.first;
+        int j=it.first.second;
+        int steps=it.second;
+        q.pop();
+        for(int i1=0;i1<4;i1++)
+        {
+            int ni=i+di[i1];
+            int nj=j+dj[i1];
+            if(isvalid(ni,nj,4,4) and vis[ni][nj]==0 and mat[ni][nj]!=0)
+            {
+                if(ni==x and nj==y)
+                {
+                    return steps+1;
+                }
+                else{
+                    q.push({{ni,nj},steps+1});
+                    vis[ni][nj]=1;
+                }
+               
+            }
+        }
+    }
+    return -1;
+}
+
+int main()
+{
+    int mat[4][4];
+    for(int i=0;i<4;i++)
+    {
+        for(int j=0;j<4;j++)
+        {
+            cin>>mat[i][j];
+        }
+    }
+    int x,y;
+    cin>>x>>y;
+    int vis[4][4];
+    for(int i=0;i<4;i++)
+    {
+        for(int j=0;j<4;j++)
+        {
+            vis[i][j]=0;
+        }
+    }
+    cout<<shortest_path(mat,vis,x,y);
+}
+
+Problem:
+
+Given a 2D binary matrix A(0-based index) of dimensions NxM. Find the minimum number of steps required to reach from (0,0) to (X, Y).
+Note: You can only move left, right, up and down, and only through cells that contain 1.
+
+Example 1:
+
+Input:
+N=3
+M=4
+A=[[1,0,0,0], 
+[1,1,0,1],[0,1,1,1]]
+X=2
+Y=3 
+Output:
+5
+Explanation:
+The shortest path is as follows:
+(0,0)->(1,0)->(1,1)->(2,1)->(2,2)->(2,3).
+Example 2:
+
+Input:
+N=3
+M=4
+A=[[1,1,1,1],
+[0,0,0,1],[0,0,0,1]]
+X=0
+Y=3
+Output:
+3
+Explanation:
+The shortest path is as follows:
+(0,0)->(0,1)->(0,2)->(0,3).
+
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function shortestDistance() which takes the integer N, M, X, Y, and the 2D binary matrix A as input parameters and returns the minimum number of steps required to go from (0,0) to (X, Y).If it is impossible to go from (0,0) to (X, Y),then function returns -1. If value of the cell (0,0) is 0 (i.e  A[0][0]=0) then return -1.
+
+
+Expected Time Complexity:O(N*M)
+Expected Auxillary Space:O(N*M)
+
+                      GEEKS SOLUTION:
+                     
+                     
+    class Solution {
+  public:
+    bool isvalid(int ni,int nj,int N,int M){
+        if(ni>=0 and nj>=0 and ni<N and nj<M){
+            return true;
+        }
+        return false;
+    }
+    int shortestDistance(int N, int M, vector<vector<int>> A, int X, int Y) {
+       if (A[0][0]==0){
+           return -1;
+       }
+       if(X==0 and Y==0){
+           return 0;
+       }
+       vector<vector<int>> vis(N,vector<int>(M,0));
+       queue<pair<pair<int,int>,int>>q;
+       q.push({{0,0},0});
+       vis[0][0]=1;
+       int di[4]={-1,0,1,0};
+       int dj[4]={0,1,0,-1};
+       while(!q.empty()){
+           auto it=q.front();
+           int i=it.first.first;
+           int j=it.first.second;
+           int steps=it.second;
+           q.pop();
+           for(int i1=0;i1<4;i1++){
+               int ni=i+di[i1];
+               int nj=j+dj[i1];
+               if(isvalid(ni,nj,N,M) and A[ni][nj]!=0 and vis[ni][nj]==0){
+                   if(ni==X and nj==Y)
+                {
+                    return steps+1;
+                }
+                   q.push({{ni,nj},steps+1});
+                   vis[ni][nj]=1;
+               }
+           }
+       }
+       return -1;
+       
+    }
+    
+};
